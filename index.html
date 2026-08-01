@@ -6,15 +6,18 @@
     <title>Kiểm tra Cấu trúc Tiếng Anh - Present Simple Tense</title>
     <style>
         :root {
-            --primary: #1e88e5;
-            --primary-dark: #1565c0;
-            --success: #2e7d32;
-            --danger: #c62828;
-            --warning: #f57c00;
-            --bg: #f4f6f9;
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --success: #16a34a;
+            --success-light: #dcfce7;
+            --error: #dc2626;
+            --error-light: #fee2e2;
+            --warning: #f59e0b;
+            --bg: #f8fafc;
             --card-bg: #ffffff;
-            --text: #2c3e50;
-            --border: #e0e0e0;
+            --text: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
         }
 
         * {
@@ -27,906 +30,865 @@
         body {
             background-color: var(--bg);
             color: var(--text);
-            padding-bottom: 50px;
+            padding-bottom: 80px;
+            user-select: none; /* Hạn chế bôi đen copy */
         }
 
-        /* Shake Effect khi Vi phạm */
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            20%, 60% { transform: translateX(-10px); }
-            40%, 80% { transform: translateX(10px); }
-        }
-        .shake {
-            animation: shake 0.4s ease-in-out;
-        }
-
-        /* Sticky Dashboard */
+        /* --- DASHBOARD STICKY --- */
         .dashboard {
             position: sticky;
             top: 0;
             z-index: 100;
-            background: #ffffff;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            border-bottom: 2px solid var(--border);
+            padding: 12px 24px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
             display: flex;
             justify-content: space-around;
             align-items: center;
             flex-wrap: wrap;
-            gap: 15px;
-            border-bottom: 3px solid var(--primary);
+            gap: 12px;
         }
 
-        .dash-item {
-            text-align: center;
+        .stat-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
         }
 
-        .dash-label {
-            font-size: 0.8rem;
-            color: #666;
-            text-transform: uppercase;
-            font-weight: bold;
+        .stat-value {
+            background: #f1f5f9;
+            padding: 4px 12px;
+            border-radius: 20px;
+            color: var(--primary);
         }
 
-        .dash-value {
-            font-size: 1.4rem;
-            font-weight: bold;
-            color: var(--primary-dark);
+        .stat-value.violations {
+            color: var(--error);
+            background: var(--error-light);
         }
 
-        .dash-value.danger { color: var(--danger); }
-        .dash-value.success { color: var(--success); }
-
-        .btn-submit-all {
-            background-color: var(--success);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            font-weight: bold;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .btn-submit-all:hover {
-            background-color: #1b5e20;
-        }
-
-        /* Container chính */
+        /* --- MAIN CONTAINER --- */
         .container {
-            max-width: 900px;
-            margin: 25px auto;
-            padding: 0 15px;
+            max-width: 850px;
+            margin: 24px auto;
+            padding: 0 16px;
+        }
+
+        .header-title {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .header-title h1 {
+            color: var(--primary);
+            font-size: 1.8rem;
+            margin-bottom: 8px;
         }
 
         .section-card {
             background: var(--card-bg);
-            border-radius: 10px;
-            padding: 25px;
-            margin-bottom: 25px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            border: 1px solid var(--border);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
 
         .section-title {
+            font-size: 1.2rem;
             color: var(--primary-dark);
-            border-bottom: 2px solid #eef2f5;
-            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 8px;
             margin-bottom: 20px;
-            font-size: 1.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .section-desc {
-            font-size: 0.95rem;
-            color: #555;
-            margin-bottom: 15px;
-            font-style: italic;
-        }
-
-        /* Question Styles */
-        .question-card {
-            background: #fdfdfd;
+        /* --- CÂU HỎI & TƯƠNG TÁC --- */
+        .question-item {
+            position: relative;
+            background: #fafafa;
             border: 1px solid var(--border);
             border-radius: 8px;
-            padding: 18px;
-            margin-bottom: 15px;
-            position: relative;
-            transition: border 0.3s ease;
+            padding: 16px;
+            margin-bottom: 16px;
+            transition: all 0.3s ease;
         }
 
-        .question-card.answered-correct {
-            border-left: 5px solid var(--success);
-            background-color: #f1f8e9;
+        .question-item.correct {
+            background: var(--success-light);
+            border-color: var(--success);
         }
 
-        .question-card.answered-hint {
-            border-left: 5px solid var(--warning);
-            background-color: #fffde7;
-        }
-
-        .attempt-counter {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            font-size: 0.75rem;
-            background: #e3f2fd;
-            color: var(--primary-dark);
-            padding: 3px 8px;
-            border-radius: 12px;
-            font-weight: bold;
-        }
-
-        .q-text {
-            font-size: 1rem;
+        .question-header {
+            display: flex;
+            justify-content: space-between;
             margin-bottom: 12px;
-            font-weight: 500;
-            padding-right: 70px;
+            font-weight: 600;
         }
 
-        /* Inputs & Controls */
+        .attempts-badge {
+            font-size: 0.8rem;
+            background: #e2e8f0;
+            color: var(--text-muted);
+            padding: 2px 8px;
+            border-radius: 12px;
+        }
+
+        .question-text {
+            margin-bottom: 12px;
+            font-size: 1.05rem;
+            line-height: 1.5;
+        }
+
         .input-group {
             display: flex;
-            gap: 10px;
-            align-items: center;
+            gap: 8px;
             flex-wrap: wrap;
         }
 
         input[type="text"], textarea {
-            padding: 10px 12px;
-            border: 1px solid #ccc;
+            flex: 1;
+            min-width: 200px;
+            padding: 10px 14px;
+            border: 1px solid var(--border);
             border-radius: 6px;
-            font-size: 0.95rem;
+            font-size: 1rem;
             outline: none;
-            transition: 0.2s;
+            transition: border 0.2s;
         }
 
         input[type="text"]:focus, textarea:focus {
             border-color: var(--primary);
-            box-shadow: 0 0 5px rgba(30, 136, 229, 0.3);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
 
-        input.q-input {
-            flex: 1;
-            min-width: 200px;
+        input:disabled, textarea:disabled {
+            background-color: #f1f5f9;
+            cursor: not-allowed;
+            color: #334155;
         }
 
-        textarea.essay-input {
-            width: 100%;
-            height: 120px;
-            resize: vertical;
-        }
-
-        .btn {
-            padding: 10px 16px;
-            border: none;
-            border-radius: 6px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.2s;
-            font-size: 0.9rem;
-        }
-
-        .btn-check {
-            background-color: var(--primary);
-            color: white;
-        }
-        .btn-check:hover { background-color: var(--primary-dark); }
-
-        .btn-hint {
-            background-color: var(--warning);
-            color: white;
-        }
-        .btn-hint:hover { background-color: #e65100; }
-
-        .btn-variants {
-            background-color: #78909c;
-            color: white;
-            display: none;
-            margin-top: 8px;
-        }
-
-        /* Multiple Choice Styling */
-        .mc-options {
+        /* Multiple Choice Styles */
+        .options-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 10px;
-            margin-top: 10px;
+            width: 100%;
         }
 
-        .mc-btn {
+        .option-btn {
             background: #fff;
             border: 1px solid var(--border);
-            padding: 10px;
+            padding: 10px 14px;
             border-radius: 6px;
-            text-align: left;
             cursor: pointer;
-            transition: 0.2s;
+            text-align: left;
+            font-size: 1rem;
+            transition: all 0.2s;
         }
 
-        .mc-btn:hover { background: #e3f2fd; }
-        .mc-btn.correct { background: var(--success) !important; color: white; border-color: var(--success); }
-        .mc-btn.wrong { background: var(--danger) !important; color: white; border-color: var(--danger); }
+        .option-btn:hover:not(:disabled) {
+            border-color: var(--primary);
+            background: #eff6ff;
+        }
 
-        /* Feedback Message */
-        .feedback {
+        .option-btn.selected-correct {
+            background: var(--success) !important;
+            color: white !important;
+            border-color: var(--success) !important;
+        }
+
+        .option-btn.selected-wrong {
+            background: var(--error) !important;
+            color: white !important;
+            border-color: var(--error) !important;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        .btn-primary:hover { background: var(--primary-dark); }
+
+        .btn-warning {
+            background: #f59e0b;
+            color: white;
+        }
+        .btn-warning:hover { background: #d97706; }
+
+        .btn-secondary {
+            background: #64748b;
+            color: white;
+        }
+
+        .btn-variants {
+            margin-top: 10px;
+            background: transparent;
+            color: var(--primary);
+            border: 1px dashed var(--primary);
+            display: none;
+            font-size: 0.85rem;
+        }
+
+        .feedback-msg {
             margin-top: 8px;
-            font-size: 0.88rem;
-            font-weight: bold;
+            font-size: 0.9rem;
+            font-weight: 600;
         }
-        .feedback.correct { color: var(--success); }
-        .feedback.wrong { color: var(--danger); }
-        .feedback.info { color: #0277bd; }
 
-        /* Toast Alert (Anti-cheat) */
-        #toast {
+        .feedback-msg.correct { color: var(--success); }
+        .feedback-msg.wrong { color: var(--error); }
+
+        .variants-box {
+            margin-top: 8px;
+            padding: 8px 12px;
+            background: #eff6ff;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            color: var(--primary-dark);
+            display: none;
+        }
+
+        /* Bottom Submit Area */
+        .submit-container {
+            text-align: center;
+            margin-top: 32px;
+        }
+
+        .btn-submit-all {
+            padding: 14px 40px;
+            font-size: 1.2rem;
+            background: var(--success);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3);
+        }
+
+        /* --- TOAST & MODAL --- */
+        .toast {
             position: fixed;
             top: 80px;
             left: 50%;
             transform: translateX(-50%);
-            background-color: var(--danger);
+            background: var(--error);
             color: white;
             padding: 12px 24px;
             border-radius: 8px;
-            font-weight: bold;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            z-index: 9999;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1000;
             display: none;
+            animation: fadeIn 0.3s;
         }
 
-        /* Custom Modal System */
         .modal-overlay {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5);
-            display: none;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 1000;
+            z-index: 500;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
         }
 
-        .modal-card {
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
             background: white;
-            width: 90%;
-            max-width: 550px;
+            padding: 24px;
             border-radius: 12px;
-            padding: 25px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-            max-height: 85vh;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
             overflow-y: auto;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            transform: translateY(-20px);
+            transition: transform 0.3s;
         }
 
-        .modal-header {
-            font-size: 1.3rem;
-            font-weight: bold;
-            margin-bottom: 15px;
-            color: var(--primary-dark);
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
         }
 
-        .modal-body {
-            margin-bottom: 20px;
-            line-height: 1.5;
+        .modal-title {
+            font-size: 1.4rem;
+            margin-bottom: 16px;
+            color: var(--text);
         }
 
         .modal-actions {
             display: flex;
             justify-content: flex-end;
-            gap: 10px;
+            gap: 12px;
+            margin-top: 20px;
         }
-
-        /* Summary Stats Grid */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        .stat-box {
-            background: #f8f9fa;
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid #e9ecef;
-        }
-
-        .stat-box .title { font-size: 0.8rem; color: #666; }
-        .stat-box .val { font-size: 1.1rem; font-weight: bold; color: var(--primary-dark); }
 
         /* History Table */
         .history-table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 10px;
+            margin-top: 12px;
             font-size: 0.85rem;
         }
 
         .history-table th, .history-table td {
-            border: 1px solid #ddd;
-            padding: 8px;
+            border: 1px solid var(--border);
+            padding: 6px 8px;
             text-align: center;
         }
 
-        .history-table th { background-color: #f2f2f2; }
+        .history-table th { background: #f1f5f9; }
+
+        /* Animation Keyframes */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-10px); }
+            40%, 80% { transform: translateX(10px); }
+        }
+
+        .shake-screen {
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translate(-50%, -10px); }
+            to { opacity: 1; transform: translate(-50%, 0); }
+        }
     </style>
 </head>
 <body>
 
-    <!-- STICKY DASHBOARD -->
-    <div class="dashboard" id="dashboard">
-        <div class="dash-item">
-            <div class="dash-label">Thời gian</div>
-            <div class="dash-value" id="timer">10:00</div>
-        </div>
-        <div class="dash-item">
-            <div class="dash-label">Tiến trình</div>
-            <div class="dash-value" id="progress">0 / 30</div>
-        </div>
-        <div class="dash-item">
-            <div class="dash-label">Điểm hệ 10</div>
-            <div class="dash-value success" id="realtime-score">0.0</div>
-        </div>
-        <div class="dash-item">
-            <div class="dash-label">Lỗi vi phạm</div>
-            <div class="dash-value danger" id="violations-count">0</div>
-        </div>
-        <button class="btn-submit-all" onclick="finishQuiz()">NỘP BÀI</button>
+    <!-- DASHBOARD STICKY -->
+    <div class="dashboard">
+        <div class="stat-box">📝 Tiến trình: <span class="stat-value" id="progress">0/31</span></div>
+        <div class="stat-box">⭐ Điểm hệ 10: <span class="stat-value" id="realtime-score">0.0</span></div>
+        <div class="stat-box">⚠️ Vi phạm: <span class="stat-value violations" id="violation-count">0</span></div>
     </div>
 
     <!-- TOAST MESSAGE -->
-    <div id="toast">⚠️ PHÁT HIỆN VI PHẠM (Rời Tab / Copy Paste)! Trừ 1 điểm.</div>
+    <div class="toast" id="toast">⚠️ PHÁT HIỆN VI PHẠM (RỜI TAB / COPY-PASTE)! TRỪ 1 ĐIỂM!</div>
 
-    <!-- MAIN QUIZ CONTENT -->
-    <div class="container" id="quiz-container"></div>
+    <!-- MAIN APP CONTENT -->
+    <div class="container">
+        <div class="header-title">
+            <h1>PRESENT SIMPLE TENSE</h1>
+            <p style="color: var(--text-muted)">Bài kiểm tra cấu trúc & Sử dụng thì Hiện Tại Đơn</p>
+        </div>
+
+        <div id="quiz-body"></div>
+
+        <div class="submit-container">
+            <button class="btn-submit-all" onclick="submitExam()">NỘP BÀI KẾT THÚC</button>
+        </div>
+    </div>
 
     <!-- CUSTOM MODAL CONFIRM HINT -->
-    <div class="modal-overlay" id="hint-modal">
-        <div class="modal-card">
-            <div class="modal-header">Xác nhận xem lời giải</div>
-            <div class="modal-body">
-                Nếu xem lời giải, bạn sẽ <b>không nhận được điểm</b> (0 điểm) cho câu hỏi này.<br>
-                Bạn có chắc chắn muốn xem không?
-            </div>
+    <div class="modal-overlay" id="modal-hint">
+        <div class="modal-content">
+            <h3 class="modal-title">Xác nhận xem lời giải</h3>
+            <p>Nếu bạn chọn xem lời giải, <strong>câu hỏi này sẽ bị tính 0 điểm</strong>. Bạn có chắc chắn muốn xem không?</p>
             <div class="modal-actions">
-                <button class="btn" style="background:#ccc" onclick="closeHintModal()">Hủy</button>
-                <button class="btn btn-hint" id="confirm-hint-btn">Đồng ý xem</button>
+                <button class="btn btn-secondary" onclick="closeHintModal()">Hủy</button>
+                <button class="btn btn-warning" id="btn-confirm-hint">Đồng ý xem</button>
             </div>
         </div>
     </div>
 
-    <!-- RESULT & HISTORY MODAL -->
-    <div class="modal-overlay" id="result-modal">
-        <div class="modal-card">
-            <div class="modal-header">BẢNG KẾT QUẢ BÀI KIỂM TRA</div>
-            <div class="modal-body">
-                <div class="stats-grid">
-                    <div class="stat-box">
-                        <div class="title">Điểm hệ 10</div>
-                        <div class="val" id="res-score">0.0</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="title">Tự làm đúng</div>
-                        <div class="val" id="res-correct">0 / 0</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="title">Thời gian hoàn thành</div>
-                        <div class="val" id="res-time">00:00</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="title">Số câu xem giải</div>
-                        <div class="val" id="res-hints">0</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="title">Số lần vi phạm</div>
-                        <div class="val" id="res-violations">0</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="title">Tổng lượt thử</div>
-                        <div class="val" id="res-attempts">0</div>
-                    </div>
-                </div>
-
-                <h3 style="margin-top: 15px; margin-bottom: 5px; font-size: 1rem;">Lịch Sử Làm Bài (Mới nhất)</h3>
+    <!-- CUSTOM MODAL RESULT & HISTORY -->
+    <div class="modal-overlay" id="modal-result">
+        <div class="modal-content" style="max-width: 600px;">
+            <h3 class="modal-title" style="text-align: center; color: var(--primary);">KẾT QUẢ BÀI KIỂM TRA</h3>
+            <div id="result-stats" style="margin-bottom: 20px; line-height: 1.8;"></div>
+            
+            <h4>📜 Lịch sử các lần làm bài</h4>
+            <div style="max-height: 180px; overflow-y: auto;">
                 <table class="history-table">
                     <thead>
                         <tr>
-                            <th>Thời gian</th>
-                            <th>Điểm số</th>
-                            <th>Đúng</th>
-                            <th>Lỗi VP</th>
+                            <th>Lần</th>
+                            <th>Ngày làm</th>
+                            <th>Điểm</th>
+                            <th>Tự làm</th>
+                            <th>Xem giải</th>
+                            <th>Lỗi</th>
                         </tr>
                     </thead>
-                    <tbody id="history-rows"></tbody>
+                    <tbody id="history-list"></tbody>
                 </table>
             </div>
-            <div class="modal-actions">
-                <button class="btn btn-check" onclick="location.reload()">Làm Lại Bài</button>
+
+            <div class="modal-actions" style="justify-content: center; margin-top: 24px;">
+                <button class="btn btn-primary" onclick="location.reload()">Làm lại bài</button>
             </div>
         </div>
     </div>
 
     <script>
-        // --- 1. DỮ LIỆU CÂU HỎI VỚI ĐẦY ĐỦ ĐÁP ÁN BIẾN THỂ ---
+        // --- 1. DỮ LIỆU CÂU HỎI ---
         const quizData = [
-            {
-                section: "PHẦN 1: CHIA ĐỘNG TỪ ĐÚNG DẠNG",
-                desc: "Điền dạng đúng của động từ trong ngoặc.",
-                questions: [
-                    { id: "p1_1", q: "1. She (go) ______ to work by bus every day.", a: ["goes"] },
-                    { id: "p1_2", q: "2. My brother (not/like) ______ vegetables.", a: ["doesn't like", "does not like", "doesnt like"] },
-                    { id: "p1_3", q: "3. ______ you (watch) ______ TV in the evening?", a: ["Do...watch", "Do watch"], isSplit: true },
-                    { id: "p1_4", q: "4. He (study) ______ English every weekend.", a: ["studies"] },
-                    { id: "p1_5", q: "5. They (not/live) ______ in this city.", a: ["don't live", "do not live", "dont live"] },
-                    { id: "p1_6", q: "6. ______ your mother (cook) ______ dinner every day?", a: ["Does...cook", "Does cook"], isSplit: true },
-                    { id: "p1_7", q: "7. The shop (close) ______ at 9 p.m.", a: ["closes"] },
-                    { id: "p1_8", q: "8. I (not/drink) ______ coffee in the morning.", a: ["don't drink", "do not drink", "dont drink"] },
-                    { id: "p1_9", q: "9. ______ it (rain) ______ a lot here in summer?", a: ["Does...rain", "Does rain"], isSplit: true },
-                    { id: "p1_10", q: "10. We (have) ______ lunch at 12 o'clock.", a: ["have"] }
-                ]
-            },
-            {
-                section: "PHẦN 2: SẮP XẾP THÀNH CÂU HOÀN CHỈNH",
-                desc: "Sắp xếp các từ thành câu đúng.",
-                questions: [
-                    { id: "p2_1", q: "1. usually / I / at 6 a.m. / get up", a: ["I usually get up at 6 a.m.", "I usually get up at 6 am", "I get up at 6 a.m. usually"] },
-                    { id: "p2_2", q: "2. does / not / like / She / spicy food", a: ["She does not like spicy food.", "She doesn't like spicy food.", "She doesnt like spicy food."] },
-                    { id: "p2_3", q: "3. every day / does / go / he / to the gym?", a: ["Does he go to the gym every day?"] },
-                    { id: "p2_4", q: "4. don't / watch / We / horror movies", a: ["We don't watch horror movies.", "We do not watch horror movies.", "We dont watch horror movies."] },
-                    { id: "p2_5", q: "5. speak / Does / English / your father / well?", a: ["Does your father speak English well?"] }
-                ]
-            },
-            {
-                section: "PHẦN 3: TÌM VÀ SỬA LỖI SAI",
-                desc: "Nhập lại câu đúng hoàn chỉnh sau khi đã sửa lỗi sai.",
-                questions: [
-                    { id: "p3_1", q: "1. She go to school every morning.", a: ["She goes to school every morning."] },
-                    { id: "p3_2", q: "2. Does he plays football on Sundays?", a: ["Does he play football on Sundays?"] },
-                    { id: "p3_3", q: "3. My parents doesn't drink tea.", a: ["My parents don't drink tea.", "My parents do not drink tea.", "My parents dont drink tea."] },
-                    { id: "p3_4", q: "4. I likes eating Vietnamese food.", a: ["I like eating Vietnamese food."] },
-                    { id: "p3_5", q: "5. Do she work in a bank?", a: ["Does she work in a bank?"] },
-                    { id: "p3_6", q: "6. He don't watch TV at night.", a: ["He doesn't watch TV at night.", "He does not watch TV at night.", "He doesnt watch TV at night."] },
-                    { id: "p3_7", q: "7. Water boil at 100 degrees Celsius.", a: ["Water boils at 100 degrees Celsius.", "Water boils at 100 degrees C."] }
-                ]
-            },
-            {
-                section: "PHẦN 4: CÂU HỎI ĐÁP - LUYỆN NÓI (Dành cho Giáo viên 1-1)",
-                desc: "Học viên trả lời tự do bằng câu đầy đủ (Hệ thống lưu bài viết, không chấm điểm tự động).",
-                isPractice: true,
-                questions: [
-                    { id: "p4_1", q: "1. What time do you usually get up?" },
-                    { id: "p4_2", q: "2. What do you have for breakfast?" },
-                    { id: "p4_3", q: "3. How do you go to work/school?" },
-                    { id: "p4_4", q: "4. Does your family live near you?" },
-                    { id: "p4_5", q: "5. What does your best friend do (for a living)?" },
-                    { id: "p4_6", q: "6. Do you drink coffee or tea in the morning?" },
-                    { id: "p4_7", q: "7. What do you usually do on weekends?" },
-                    { id: "p4_8", q: "8. Does it rain a lot in your city?" },
-                    { id: "p4_9", q: "9. What time does your class/work start?" },
-                    { id: "p4_10", q: "10. Do you often eat out or cook at home?" }
-                ]
-            },
-            {
-                section: "PHẦN 5: VIẾT ĐOẠN VĂN NGẮN (5-7 CÂU)",
-                desc: "Viết đoạn văn miêu tả một ngày bình thường của bạn.",
-                isPractice: true,
-                isEssay: true,
-                questions: [
-                    { id: "p5_1", q: "Gợi ý: Thức dậy lúc mấy giờ? Làm gì buổi sáng? Đi làm/học bằng gì? Ăn trưa lúc mấy giờ? Buổi tối làm gì?" }
-                ]
-            },
-            {
-                section: "PHẦN 6: TRẮC NGHIỆM NHANH (MULTIPLE CHOICE)",
-                desc: "Chọn đáp án đúng nhất.",
-                isMC: true,
-                questions: [
-                    { id: "p6_1", q: "1. My sister ______ to the market every morning.", options: ["A. go", "B. goes", "C. going", "D. is go"], a: 1 },
-                    { id: "p6_2", q: "2. ______ they live in Hanoi?", options: ["A. Do", "B. Does", "C. Is", "D. Are"], a: 0 },
-                    { id: "p6_3", q: "3. He ______ TV after dinner.", options: ["A. don't watch", "B. doesn't watches", "C. doesn't watch", "D. not watch"], a: 2 },
-                    { id: "p6_4", q: "4. The sun ______ in the east.", options: ["A. rise", "B. rises", "C. rising", "D. is rising"], a: 1 },
-                    { id: "p6_5", q: "5. ______ your father work on Saturdays?", options: ["A. Do", "B. Does", "C. Is", "D. Are"], a: 1 },
-                    { id: "p6_6", q: "6. I ______ a shower every morning.", options: ["A. take", "B. takes", "C. taking", "D. am take"], a: 0 },
-                    { id: "p6_7", q: "7. She ______ meat; she's vegetarian.", options: ["A. don't eat", "B. doesn't eats", "C. doesn't eat", "D. not eats"], a: 2 },
-                    { id: "p6_8", q: "8. We ______ English class on Tuesdays.", options: ["A. has", "B. have", "C. having", "D. is have"], a: 1 }
-                ]
-            }
+            // PHẦN 1
+            { id: 1, section: "PHẦN 1: CHIA ĐỘNG TỪ ĐÚNG DẠNG", text: "1. She (go) ______ to work by bus every day.", type: "fill", answers: ["goes"] },
+            { id: 2, section: "PHẦN 1: CHIA ĐỘNG TỪ ĐÚNG DẠNG", text: "2. My brother (not/like) ______ vegetables.", type: "fill", answers: ["doesn't like", "does not like"] },
+            { id: 3, section: "PHẦN 1: CHIA ĐỘNG TỪ ĐÚNG DẠNG", text: "3. ______ you (watch) ______ TV in the evening?", type: "fill", answers: ["Do you watch", "Do...watch"] },
+            { id: 4, section: "PHẦN 1: CHIA ĐỘNG TỪ ĐÚNG DẠNG", text: "4. He (study) ______ English every weekend.", type: "fill", answers: ["studies"] },
+            { id: 5, section: "PHẦN 1: CHIA ĐỘNG TỪ ĐÚNG DẠNG", text: "5. They (not/live) ______ in this city.", type: "fill", answers: ["don't live", "do not live"] },
+            { id: 6, section: "PHẦN 1: CHIA ĐỘNG TỪ ĐÚNG DẠNG", text: "6. ______ your mother (cook) ______ dinner every day?", type: "fill", answers: ["Does your mother cook", "Does...cook"] },
+            { id: 7, section: "PHẦN 1: CHIA ĐỘNG TỪ ĐÚNG DẠNG", text: "7. The shop (close) ______ at 9 p.m.", type: "fill", answers: ["closes"] },
+            { id: 8, section: "PHẦN 1: CHIA ĐỘNG TỪ ĐÚNG DẠNG", text: "8. I (not/drink) ______ coffee in the morning.", type: "fill", answers: ["don't drink", "do not drink"] },
+            { id: 9, section: "PHẦN 1: CHIA ĐỘNG TỪ ĐÚNG DẠNG", text: "9. ______ it (rain) ______ a lot here in summer?", type: "fill", answers: ["Does it rain", "Does...rain"] },
+            { id: 10, section: "PHẦN 1: CHIA ĐỘNG TỪ ĐÚNG DẠNG", text: "10. We (have) ______ lunch at 12 o'clock.", type: "fill", answers: ["have"] },
+
+            // PHẦN 2
+            { id: 11, section: "PHẦN 2: SẮP XẾP THÀNH CÂU HOÀN CHỈNH", text: "1. usually / I / at 6 a.m. / get up", type: "fill", answers: ["I usually get up at 6 a.m.", "I usually get up at 6 a.m"] },
+            { id: 12, section: "PHẦN 2: SẮP XẾP THÀNH CÂU HOÀN CHỈNH", text: "2. does / not / like / She / spicy food", type: "fill", answers: ["She does not like spicy food.", "She does not like spicy food", "She doesn't like spicy food.", "She doesn't like spicy food"] },
+            { id: 13, section: "PHẦN 2: SẮP XẾP THÀNH CÂU HOÀN CHỈNH", text: "3. every day / does / go / he / to the gym?", type: "fill", answers: ["Does he go to the gym every day?", "Does he go to the gym every day"] },
+            { id: 14, section: "PHẦN 2: SẮP XẾP THÀNH CÂU HOÀN CHỈNH", text: "4. don't / watch / We / horror movies", type: "fill", answers: ["We don't watch horror movies.", "We don't watch horror movies", "We do not watch horror movies.", "We do not watch horror movies"] },
+            { id: 15, section: "PHẦN 2: SẮP XẾP THÀNH CÂU HOÀN CHỈNH", text: "5. speak / Does / English / your father / well?", type: "fill", answers: ["Does your father speak English well?", "Does your father speak English well"] },
+
+            // PHẦN 3
+            { id: 16, section: "PHẦN 3: TÌM VÀ SỬA LỖI SAI (Viết lại câu đúng)", text: "1. She go to school every morning.", type: "fill", answers: ["She goes to school every morning.", "She goes to school every morning"] },
+            { id: 17, section: "PHẦN 3: TÌM VÀ SỬA LỖI SAI (Viết lại câu đúng)", text: "2. Does he plays football on Sundays?", type: "fill", answers: ["Does he play football on Sundays?", "Does he play football on Sundays"] },
+            { id: 18, section: "PHẦN 3: TÌM VÀ SỬA LỖI SAI (Viết lại câu đúng)", text: "3. My parents doesn't drink tea.", type: "fill", answers: ["My parents don't drink tea.", "My parents don't drink tea", "My parents do not drink tea.", "My parents do not drink tea"] },
+            { id: 19, section: "PHẦN 3: TÌM VÀ SỬA LỖI SAI (Viết lại câu đúng)", text: "4. I likes eating Vietnamese food.", type: "fill", answers: ["I like eating Vietnamese food.", "I like eating Vietnamese food"] },
+            { id: 20, section: "PHẦN 3: TÌM VÀ SỬA LỖI SAI (Viết lại câu đúng)", text: "5. Do she work in a bank?", type: "fill", answers: ["Does she work in a bank?", "Does she work in a bank"] },
+            { id: 21, section: "PHẦN 3: TÌM VÀ SỬA LỖI SAI (Viết lại câu đúng)", text: "6. He don't watch TV at night.", type: "fill", answers: ["He doesn't watch TV at night.", "He doesn't watch TV at night", "He does not watch TV at night.", "He does not watch TV at night"] },
+            { id: 22, section: "PHẦN 3: TÌM VÀ SỬA LỖI SAI (Viết lại câu đúng)", text: "7. Water boil at 100 degrees Celsius.", type: "fill", answers: ["Water boils at 100 degrees Celsius.", "Water boils at 100 degrees Celsius"] },
+
+            // PHẦN 4
+            { id: 23, section: "PHẦN 4: VIẾT ĐOẠN VĂN NGẮN (Gợi ý: 5-7 câu miêu tả ngày bình thường)", type: "paragraph", answers: [] },
+
+            // PHẦN 5 (Trắc nghiệm)
+            { id: 24, section: "PHẦN 5: TRẮC NGHIỆM NHANH", text: "1. My sister ______ to the market every morning.", type: "mcq", options: ["A. go", "B. goes", "C. going", "D. is go"], correctIndex: 1, answers: ["goes", "B"] },
+            { id: 25, section: "PHẦN 5: TRẮC NGHIỆM NHANH", text: "2. ______ they live in Hanoi?", type: "mcq", options: ["A. Do", "B. Does", "C. Is", "D. Are"], correctIndex: 0, answers: ["Do", "A"] },
+            { id: 26, section: "PHẦN 5: TRẮC NGHIỆM NHANH", text: "3. He ______ TV after dinner.", type: "mcq", options: ["A. don't watch", "B. doesn't watches", "C. doesn't watch", "D. not watch"], correctIndex: 2, answers: ["doesn't watch", "C"] },
+            { id: 27, section: "PHẦN 5: TRẮC NGHIỆM NHANH", text: "4. The sun ______ in the east.", type: "mcq", options: ["A. rise", "B. rises", "C. rising", "D. is rising"], correctIndex: 1, answers: ["rises", "B"] },
+            { id: 28, section: "PHẦN 5: TRẮC NGHIỆM NHANH", text: "5. ______ your father work on Saturdays?", type: "mcq", options: ["A. Do", "B. Does", "C. Is", "D. Are"], correctIndex: 1, answers: ["Does", "B"] },
+            { id: 29, section: "PHẦN 5: TRẮC NGHIỆM NHANH", text: "6. I ______ a shower every morning.", type: "mcq", options: ["A. take", "B. takes", "C. taking", "D. am take"], correctIndex: 0, answers: ["take", "A"] },
+            { id: 30, section: "PHẦN 5: TRẮC NGHIỆM NHANH", text: "7. She ______ meat; she's vegetarian.", type: "mcq", options: ["A. don't eat", "B. doesn't eats", "C. doesn't eat", "D. not eats"], correctIndex: 2, answers: ["doesn't eat", "C"] },
+            { id: 31, section: "PHẦN 5: TRẮC NGHIỆM NHANH", text: "8. We ______ English class on Tuesdays.", type: "mcq", options: ["A. has", "B. have", "C. having", "D. is have"], correctIndex: 1, answers: ["have", "B"] }
         ];
 
-        // --- 2. GLOBAL STATE ---
-        let totalScorableQuestions = 0;
-        let state = {}; 
-        let violations = 0;
-        let timeRemaining = 600; 
-        let timerInterval = null;
-        let pendingHintQId = null;
+        // --- 2. TRẠNG THÁI ỨNG DỤNG ---
+        let isExamFinished = false;
         let isModalOpen = false;
+        
+        let userStats = {
+            answeredCount: 0,
+            autoCorrectCount: 0,
+            hintUsedCount: 0,
+            violations: 0,
+            totalAttempts: 0
+        };
 
-        // --- 3. HÀM CHUẨN HÓA NÂNG CAO (XỬ LÝ DẤU NHÁY TẬN GỐC) ---
-        function normalizeText(text) {
-            if(!text) return "";
-            
-            // Bước A: Chuyển chữ thường, xóa khoảng trắng thừa
-            let res = text.toLowerCase().trim();
+        let userState = {}; // Lưu trạng thái từng câu: { attempts, status: 'correct'|'hinted'|'none', answer }
 
-            // Bước B: Chuẩn hóa TẤT CẢ các dạng dấu nháy (bàn phím iOS/iPad/Word/Unikey) về dấu nháy thẳng '
-            res = res.replace(/[’‘`´']/g, "'");
+        // Mảng từ đồng nghĩa / viết tắt để chuẩn hóa
+        const synonyms = {
+            "television": "tv",
+            "mother": "mom",
+            "father": "dad",
+            "cannot": "can't",
+            "can not": "can't",
+            "do not": "don't",
+            "does not": "doesn't"
+        };
 
-            // Bước C: Chuẩn hóa các từ viết tắt
-            const abbreviations = [
-                { raw: /\btelevision\b/g, replace: "tv" },
-                { raw: /\bmother\b/g, replace: "mom" },
-                { raw: /\bfather\b/g, replace: "dad" },
-                { raw: /\bcannot\b/g, replace: "can't" },
-                { raw: /\bdo not\b/g, replace: "don't" },
-                { raw: /\bdoes not\b/g, replace: "doesn't" },
-                { raw: /\bis not\b/g, replace: "isn't" },
-                { raw: /\bare not\b/g, replace: "aren't" },
-                { raw: /\bdont\b/g, replace: "don't" },
-                { raw: /\bdoesnt\b/g, replace: "doesn't" },
-                { raw: /\bcant\b/g, replace: "can't" }
-            ];
-            
-            abbreviations.forEach(item => {
-                res = res.replace(item.raw, item.replace);
-            });
-
-            // Bước D: Loại bỏ dấu câu không cần thiết trừ dấu nháy đơn trong từ viết tắt
-            res = res.replace(/[.,?!"]/g, "").replace(/\s+/g, " ");
-            
-            return res;
-        }
-
-        // --- 4. RENDER GIAO DIỆN ---
-        function initApp() {
-            const container = document.getElementById('quiz-container');
-            container.innerHTML = "";
-            totalScorableQuestions = 0;
-
-            quizData.forEach((sec) => {
-                const secCard = document.createElement('div');
-                secCard.className = 'section-card';
-                
-                let html = `<div class="section-title">${sec.section}</div>`;
-                if(sec.desc) html += `<div class="section-desc">${sec.desc}</div>`;
-
-                sec.questions.forEach((q) => {
-                    const isScorable = !sec.isPractice;
-                    if(isScorable) totalScorableQuestions++;
-
-                    state[q.id] = {
-                        answered: false,
-                        correct: false,
-                        hinted: false,
-                        attempts: 0,
-                        scorable: isScorable,
-                        userAns: ""
-                    };
-
-                    html += `
-                    <div class="question-card" id="card-${q.id}">
-                        <div class="attempt-counter">Lượt thử: <span id="att-${q.id}">0</span></div>
-                        <div class="q-text">${q.q}</div>
-                    `;
-
-                    if(sec.isEssay) {
-                        html += `<textarea class="essay-input" id="input-${q.id}" placeholder="Nhập đoạn văn của bạn tại đây..."></textarea>`;
-                    } else if(sec.isPractice) {
-                        html += `
-                        <div class="input-group">
-                            <input type="text" class="q-input" id="input-${q.id}" placeholder="Nhập câu trả lời..." onkeydown="handleEnter(event, '${q.id}')">
-                        </div>`;
-                    } else if(sec.isMC) {
-                        html += `<div class="mc-options">`;
-                        q.options.forEach((opt, oIdx) => {
-                            html += `<button class="mc-btn" id="mc-${q.id}-${oIdx}" onclick="checkMC('${q.id}', ${oIdx}, ${q.a})">${opt}</button>`;
-                        });
-                        html += `</div>`;
-                    } else {
-                        html += `
-                        <div class="input-group">
-                            <input type="text" class="q-input" id="input-${q.id}" placeholder="Nhập đáp án..." onkeydown="handleEnter(event, '${q.id}')">
-                            <button class="btn btn-check" onclick="checkText('${q.id}')">Gửi</button>
-                            <button class="btn btn-hint" onclick="openHintModal('${q.id}')">Giải</button>
-                        </div>`;
-                    }
-
-                    html += `
-                        <button class="btn btn-variants" id="btn-var-${q.id}" onclick="showVariants('${q.id}')">Xem các đáp án khác</button>
-                        <div class="feedback" id="fb-${q.id}"></div>
-                    </div>`;
-                });
-
-                secCard.innerHTML = html;
-                container.appendChild(secCard);
-            });
-
-            updateDashboard();
-            startTimer();
+        // --- 3. KHỞI TẠO DỰ ÁN ---
+        window.onload = function() {
+            renderQuiz();
             setupAntiCheat();
-        }
+        };
 
-        function handleEnter(e, qId) {
-            if(e.key === 'Enter') checkText(qId);
-        }
+        function renderQuiz() {
+            const body = document.getElementById('quiz-body');
+            body.innerHTML = '';
 
-        // --- 5. LOGIC CHECK TEXT ---
-        function checkText(qId) {
-            const st = state[qId];
-            if(st.answered) return;
+            let currentSection = "";
+            
+            quizData.forEach((q) => {
+                userState[q.id] = { attempts: 0, status: 'none', userAns: '' };
 
-            const inputEl = document.getElementById(`input-${qId}`);
-            const val = inputEl.value.trim();
-            if(!val) return;
-
-            st.attempts++;
-            document.getElementById(`att-${qId}`).innerText = st.attempts;
-
-            let qObj = null;
-            for(let sec of quizData) {
-                let found = sec.questions.find(item => item.id === qId);
-                if(found) { qObj = found; break; }
-            }
-
-            const normInput = normalizeText(val);
-            let isCorrect = false;
-
-            qObj.a.forEach(ans => {
-                if(normalizeText(ans) === normInput) isCorrect = true;
-            });
-
-            const fb = document.getElementById(`fb-${qId}`);
-            const card = document.getElementById(`card-${qId}`);
-
-            if(isCorrect) {
-                st.answered = true;
-                st.correct = true;
-                st.userAns = val;
-                inputEl.disabled = true;
-                card.classList.add('answered-correct');
-                fb.className = "feedback correct";
-                fb.innerText = "✓ Chính xác!";
-
-                if(qObj.a.length > 1) {
-                    document.getElementById(`btn-var-${qId}`).style.display = "inline-block";
+                // Render Section title
+                if (q.section !== currentSection) {
+                    currentSection = q.section;
+                    const secHeader = document.createElement('div');
+                    secHeader.className = 'section-title';
+                    secHeader.innerText = currentSection;
+                    body.appendChild(secHeader);
                 }
 
-                updateDashboard();
-                autoFocusNext(qId);
+                const card = document.createElement('div');
+                card.className = 'question-item';
+                card.id = `q-card-${q.id}`;
+
+                let inputHTML = '';
+
+                if (q.type === 'fill') {
+                    inputHTML = `
+                        <div class="input-group">
+                            <input type="text" id="input-${q.id}" placeholder="Nhập đáp án..." onkeypress="handleKeyPress(event, ${q.id})">
+                            <button class="btn btn-primary" onclick="checkAnswer(${q.id})">Gửi</button>
+                            <button class="btn btn-warning" onclick="openHintModal(${q.id})">Giải</button>
+                        </div>
+                    `;
+                } else if (q.type === 'paragraph') {
+                    inputHTML = `
+                        <textarea id="input-${q.id}" rows="4" placeholder="Viết đoạn văn của bạn tại đây..."></textarea>
+                        <div style="margin-top:8px;">
+                            <button class="btn btn-primary" onclick="submitParagraph(${q.id})">Lưu đoạn văn</button>
+                        </div>
+                    `;
+                } else if (q.type === 'mcq') {
+                    let opts = q.options.map((opt, idx) => `
+                        <button class="option-btn" id="opt-${q.id}-${idx}" onclick="checkMCQ(${q.id}, ${idx})">${opt}</button>
+                    `).join('');
+                    inputHTML = `
+                        <div class="options-grid">${opts}</div>
+                        <div style="margin-top:8px;">
+                            <button class="btn btn-warning" onclick="openHintModal(${q.id})">Giải</button>
+                        </div>
+                    `;
+                }
+
+                card.innerHTML = `
+                    <div class="question-header">
+                        <span>Câu ${q.id}</span>
+                        <span class="attempts-badge" id="attempts-${q.id}">Lượt thử: 0</span>
+                    </div>
+                    <div class="question-text">${q.text}</div>
+                    ${inputHTML}
+                    <div class="feedback-msg" id="feedback-${q.id}"></div>
+                    <button class="btn btn-variants" id="btn-var-${q.id}" onclick="toggleVariants(${q.id})">Xem các đáp án khác</button>
+                    <div class="variants-box" id="var-box-${q.id}">Các đáp án chấp nhận: ${q.answers.join(' | ')}</div>
+                `;
+
+                body.appendChild(card);
+            });
+
+            updateProgress();
+        }
+
+        // --- 4. CHUẨN HÓA DỮ LIỆU & LOGIC XỬ LÝ ---
+        function normalizeText(text) {
+            if (!text) return "";
+            let str = text.toLowerCase().trim();
+            // Xóa dấu câu: .,?!'’"
+            str = str.replace(/[.,?!'’"]/g, "");
+            // Thay thế các từ đồng nghĩa/viết tắt
+            Object.keys(synonyms).forEach(key => {
+                const reg = new RegExp("\\b" + key + "\\b", "g");
+                str = str.replace(reg, synonyms[key]);
+            });
+            // Xóa khoảng trắng thừa
+            return str.replace(/\s+/g, ' ');
+        }
+
+        function incrementAttempt(qId) {
+            userState[qId].attempts++;
+            userStats.totalAttempts++;
+            document.getElementById(`attempts-${qId}`).innerText = `Lượt thử: ${userState[qId].attempts}`;
+        }
+
+        function handleKeyPress(e, qId) {
+            if (e.key === 'Enter') {
+                checkAnswer(qId);
+            }
+        }
+
+        function checkAnswer(qId) {
+            if (userState[qId].status === 'correct' || isExamFinished) return;
+            
+            incrementAttempt(qId);
+            const inputEl = document.getElementById(`input-${qId}`);
+            const userVal = inputEl.value;
+            const normUser = normalizeText(userVal);
+
+            const qData = quizData.find(q => q.id === qId);
+            const isRight = qData.answers.some(ans => normalizeText(ans) === normUser);
+
+            const fbEl = document.getElementById(`feedback-${qId}`);
+
+            if (isRight) {
+                handleCorrectAnswer(qId, inputEl, fbEl);
             } else {
-                fb.className = "feedback wrong";
-                fb.innerText = "✗ Chưa chính xác, hãy thử lại!";
+                fbEl.className = "feedback-msg wrong";
+                fbEl.innerText = "❌ Chưa chính xác. Hãy thử lại!";
             }
         }
 
-        // --- 6. LOGIC CHECK MC ---
-        function checkMC(qId, selectedIdx, correctIdx) {
-            const st = state[qId];
-            if(st.answered) return;
+        function checkMCQ(qId, optIdx) {
+            if (userState[qId].status === 'correct' || isExamFinished) return;
 
-            st.attempts++;
-            document.getElementById(`att-${qId}`).innerText = st.attempts;
+            incrementAttempt(qId);
+            const qData = quizData.find(q => q.id === qId);
+            const fbEl = document.getElementById(`feedback-${qId}`);
 
-            const card = document.getElementById(`card-${qId}`);
-            const fb = document.getElementById(`fb-${qId}`);
-
-            if(selectedIdx === correctIdx) {
-                st.answered = true;
-                st.correct = true;
-                document.getElementById(`mc-${qId}-${selectedIdx}`).classList.add('correct');
-                card.classList.add('answered-correct');
-                fb.className = "feedback correct";
-                fb.innerText = "✓ Đúng!";
-                updateDashboard();
-                autoFocusNext(qId);
+            if (optIdx === qData.correctIndex) {
+                document.getElementById(`opt-${qId}-${optIdx}`).classList.add('selected-correct');
+                handleCorrectAnswer(qId, null, fbEl);
+                // Disable all option buttons
+                const btns = document.querySelectorAll(`#q-card-${qId} .option-btn`);
+                btns.forEach(b => b.disabled = true);
             } else {
-                const btn = document.getElementById(`mc-${qId}-${selectedIdx}`);
-                btn.classList.add('wrong');
-                setTimeout(() => btn.classList.remove('wrong'), 1000);
-                fb.className = "feedback wrong";
-                fb.innerText = "✗ Sai rồi, chọn lại!";
+                const btn = document.getElementById(`opt-${qId}-${optIdx}`);
+                btn.classList.add('selected-wrong');
+                setTimeout(() => btn.classList.remove('selected-wrong'), 1000);
+                fbEl.className = "feedback-msg wrong";
+                fbEl.innerText = "❌ Sai rồi, chọn lại nhé!";
             }
         }
 
-        // --- 7. ĐÁP ÁN KHÁC ---
-        function showVariants(qId) {
-            let qObj = null;
-            for(let sec of quizData) {
-                let found = sec.questions.find(item => item.id === qId);
-                if(found) { qObj = found; break; }
+        function handleCorrectAnswer(qId, inputEl, fbEl) {
+            userState[qId].status = 'correct';
+            userStats.autoCorrectCount++;
+            
+            if (inputEl) inputEl.disabled = true;
+
+            const card = document.getElementById(`q-card-${qId}`);
+            card.classList.add('correct');
+
+            fbEl.className = "feedback-msg correct";
+            fbEl.innerText = "🎉 Chính xác!";
+
+            // Hiện nút biến thể đáp án nếu có > 1 đáp án
+            const qData = quizData.find(q => q.id === qId);
+            if (qData.answers && qData.answers.length > 1) {
+                document.getElementById(`btn-var-${qId}`).style.display = "inline-block";
             }
-            const fb = document.getElementById(`fb-${qId}`);
-            fb.className = "feedback info";
-            fb.innerText = "Các biến thể đáp án đúng: " + qObj.a.join(" | ");
+
+            updateProgress();
+            updateRealtimeScore();
+            autoFocusNext(qId);
         }
 
-        // --- 8. MODAL HINT ---
+        function submitParagraph(qId) {
+            const inputEl = document.getElementById(`input-${qId}`);
+            if (inputEl.value.trim().length > 10) {
+                if (userState[qId].status !== 'correct') {
+                    userState[qId].status = 'correct';
+                    userStats.autoCorrectCount++;
+                    document.getElementById(`q-card-${qId}`).classList.add('correct');
+                    document.getElementById(`feedback-${qId}`).className = "feedback-msg correct";
+                    document.getElementById(`feedback-${qId}`).innerText = "✅ Đã ghi nhận đoạn văn của bạn!";
+                    inputEl.disabled = true;
+                    updateProgress();
+                    updateRealtimeScore();
+                    autoFocusNext(qId);
+                }
+            } else {
+                alert("Đoạn văn quá ngắn. Vui lòng viết 5-7 câu!");
+            }
+        }
+
+        function autoFocusNext(currentId) {
+            const nextId = currentId + 1;
+            const nextCard = document.getElementById(`q-card-${nextId}`);
+            if (nextCard) {
+                nextCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                const nextInput = document.getElementById(`input-${nextId}`);
+                if (nextInput) nextInput.focus();
+            }
+        }
+
+        function toggleVariants(qId) {
+            const box = document.getElementById(`var-box-${qId}`);
+            box.style.display = (box.style.display === 'block') ? 'none' : 'block';
+        }
+
+        // --- 5. CUSTOM MODAL HINT (GIẢI) ---
+        let currentHintId = null;
+
         function openHintModal(qId) {
-            if(state[qId].answered) return;
-            pendingHintQId = qId;
+            if (userState[qId].status === 'correct' || userState[qId].status === 'hinted') return;
+            currentHintId = qId;
             isModalOpen = true;
-            document.getElementById('hint-modal').style.display = 'flex';
+            document.getElementById('modal-hint').classList.add('active');
         }
 
         function closeHintModal() {
-            document.getElementById('hint-modal').style.display = 'none';
-            pendingHintQId = null;
+            document.getElementById('modal-hint').classList.remove('active');
             isModalOpen = false;
+            currentHintId = null;
         }
 
-        document.getElementById('confirm-hint-btn').addEventListener('click', () => {
-            if(!pendingHintQId) return;
-            const qId = pendingHintQId;
-            const st = state[qId];
-
-            st.answered = true;
-            st.correct = false;
-            st.hinted = true;
-
-            let qObj = null;
-            for(let sec of quizData) {
-                let found = sec.questions.find(item => item.id === qId);
-                if(found) { qObj = found; break; }
+        document.getElementById('btn-confirm-hint').onclick = function() {
+            if (currentHintId !== null) {
+                applyHint(currentHintId);
+                closeHintModal();
             }
+        };
+
+        function applyHint(qId) {
+            userState[qId].status = 'hinted';
+            userStats.hintUsedCount++;
+
+            const qData = quizData.find(q => q.id === qId);
+            const fbEl = document.getElementById(`feedback-${qId}`);
+            
+            fbEl.className = "feedback-msg wrong";
+            fbEl.innerText = `💡 Đáp án đúng: ${qData.answers[0] || "Đã xem giải"}`;
 
             const inputEl = document.getElementById(`input-${qId}`);
-            if(inputEl) {
-                inputEl.value = qObj.a[0];
+            if (inputEl) {
+                inputEl.value = qData.answers[0] || "";
                 inputEl.disabled = true;
             }
 
-            const card = document.getElementById(`card-${qId}`);
-            card.classList.add('answered-hint');
-
-            const fb = document.getElementById(`fb-${qId}`);
-            fb.className = "feedback wrong";
-            fb.innerText = "Đã xem giải. Đáp án đúng: " + qObj.a[0];
-
-            closeHintModal();
-            updateDashboard();
-            autoFocusNext(qId);
-        });
-
-        // --- 9. FOCUS KẾ TIẾP ---
-        function autoFocusNext(currentQId) {
-            let allIds = [];
-            quizData.forEach(s => s.questions.forEach(q => allIds.push(q.id)));
-            let idx = allIds.indexOf(currentQId);
-            if(idx !== -1 && idx < allIds.length - 1) {
-                let nextId = allIds[idx + 1];
-                let nextCard = document.getElementById(`card-${nextId}`);
-                let nextInput = document.getElementById(`input-${nextId}`);
-                
-                if(nextCard) {
-                    nextCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
-                if(nextInput) {
-                    setTimeout(() => nextInput.focus(), 500);
-                }
+            if (qData.type === 'mcq') {
+                const btns = document.querySelectorAll(`#q-card-${qId} .option-btn`);
+                btns.forEach((b, idx) => {
+                    b.disabled = true;
+                    if (idx === qData.correctIndex) b.classList.add('selected-correct');
+                });
             }
+
+            updateProgress();
+            updateRealtimeScore();
+            autoFocusNext(qId);
         }
 
-        // --- 10. TIMER & DASHBOARD ---
-        function startTimer() {
-            timerInterval = setInterval(() => {
-                timeRemaining--;
-                let m = Math.floor(timeRemaining / 60);
-                let s = timeRemaining % 60;
-                document.getElementById('timer').innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
-
-                if(timeRemaining <= 0) {
-                    clearInterval(timerInterval);
-                    alert("Đã hết thời gian làm bài!");
-                    finishQuiz();
-                }
-            }, 1000);
+        // --- 6. TIẾN TRÌNH & ĐIỂM SỐ REALTIME ---
+        function updateProgress() {
+            let done = 0;
+            Object.keys(userState).forEach(k => {
+                if (userState[k].status !== 'none') done++;
+            });
+            userStats.answeredCount = done;
+            document.getElementById('progress').innerText = `${done}/${quizData.length}`;
         }
 
-        function updateDashboard() {
-            let doneCount = 0;
-            let correctCount = 0;
+        function calculateScore() {
+            const maxScore = 10;
+            const pointsPerQuestion = maxScore / quizData.length;
+            let baseScore = userStats.autoCorrectCount * pointsPerQuestion;
+            
+            // Trừ điểm vi phạm (1 điểm / 1 lần vi phạm)
+            let finalScore = baseScore - userStats.violations;
+            return Math.max(0, finalScore).toFixed(1);
+        }
 
-            Object.keys(state).forEach(k => {
-                if(state[k].scorable) {
-                    if(state[k].answered) doneCount++;
-                    if(state[k].correct && !state[k].hinted) correctCount++;
+        function updateRealtimeScore() {
+            document.getElementById('realtime-score').innerText = calculateScore();
+        }
+
+        // --- 7. HỆ THỐNG CHỐNG GIAN LẬN (ANTI-CHEAT) ---
+        function setupAntiCheat() {
+            // Bắt sự kiện rời Tab
+            window.addEventListener('blur', () => {
+                if (!isExamFinished && !isModalOpen) {
+                    triggerViolation();
                 }
             });
 
-            document.getElementById('progress').innerText = `${doneCount} / ${totalScorableQuestions}`;
-            
-            let rawScore = (correctCount / totalScorableQuestions) * 10;
-            let finalScore = Math.max(0, rawScore - violations);
-            document.getElementById('realtime-score').innerText = finalScore.toFixed(1);
+            // Bắt sự kiện Copy/Paste
+            document.addEventListener('paste', (e) => {
+                if (!isExamFinished) {
+                    e.preventDefault();
+                    triggerViolation();
+                }
+            });
         }
 
-        // --- 11. ANTI CHEAT ---
         function triggerViolation() {
-            if(isModalOpen) return;
+            userStats.violations++;
+            document.getElementById('violation-count').innerText = userStats.violations;
             
-            violations++;
-            document.getElementById('violations-count').innerText = violations;
+            // Rung màn hình
+            document.body.classList.add('shake-screen');
+            setTimeout(() => document.body.classList.remove('shake-screen'), 500);
 
-            document.body.classList.add('shake');
-            setTimeout(() => document.body.classList.remove('shake'), 400);
-
+            // Hiện Toast cảnh báo
             const toast = document.getElementById('toast');
             toast.style.display = 'block';
             setTimeout(() => { toast.style.display = 'none'; }, 3000);
 
-            updateDashboard();
+            updateRealtimeScore();
         }
 
-        function setupAntiCheat() {
-            window.addEventListener('blur', () => { triggerViolation(); });
-            document.addEventListener('paste', (e) => { triggerViolation(); });
-        }
+        // --- 8. NỘP BÀI & QUẢN LÝ LỊCH SỬ (LOCALSTORAGE) ---
+        function submitExam() {
+            if (isExamFinished) return;
+            isExamFinished = true;
 
-        // --- 12. FINISH & HISTORY ---
-        function finishQuiz() {
-            clearInterval(timerInterval);
-            isModalOpen = true;
+            const finalScore = calculateScore();
 
-            let correctCount = 0;
-            let hintCount = 0;
-            let totalAttempts = 0;
-
-            Object.keys(state).forEach(k => {
-                if(state[k].scorable) {
-                    if(state[k].correct && !state[k].hinted) correctCount++;
-                    if(state[k].hinted) hintCount++;
-                    totalAttempts += state[k].attempts;
-                }
-            });
-
-            let rawScore = (correctCount / totalScorableQuestions) * 10;
-            let finalScore = Math.max(0, rawScore - violations).toFixed(1);
-
-            let timeSpent = 600 - timeRemaining;
-            let mSpent = Math.floor(timeSpent / 60);
-            let sSpent = timeSpent % 60;
-            let timeStr = `${mSpent}p ${sSpent}s`;
-
-            document.getElementById('res-score').innerText = finalScore;
-            document.getElementById('res-correct').innerText = `${correctCount} / ${totalScorableQuestions}`;
-            document.getElementById('res-time').innerText = timeStr;
-            document.getElementById('res-hints').innerText = hintCount;
-            document.getElementById('res-violations').innerText = violations;
-            document.getElementById('res-attempts').innerText = totalAttempts;
-
+            // Lưu lịch sử vào LocalStorage
             saveHistory({
                 date: new Date().toLocaleString('vi-VN'),
                 score: finalScore,
-                correct: `${correctCount}/${totalScorableQuestions}`,
-                violations: violations
+                autoCorrect: userStats.autoCorrectCount,
+                hinted: userStats.hintUsedCount,
+                violations: userStats.violations,
+                attempts: userStats.totalAttempts
             });
 
-            renderHistory();
-            document.getElementById('result-modal').style.display = 'flex';
+            // Render kết quả Modal
+            const statsHTML = `
+                <p>🏆 <strong>Điểm số hệ 10:</strong> <span style="font-size:1.4rem; color:var(--primary); font-weight:bold;">${finalScore}</span></p>
+                <p>✅ <strong>Số câu tự làm đúng:</strong> ${userStats.autoCorrectCount} / ${quizData.length}</p>
+                <p>💡 <strong>Số câu xem lời giải:</strong> ${userStats.hintUsedCount}</p>
+                <p>⚠️ <strong>Số lần vi phạm:</strong> <span style="color:var(--error);">${userStats.violations}</span></p>
+                <p>🔄 <strong>Tổng số lượt thử:</strong> ${userStats.totalAttempts}</p>
+            `;
+            document.getElementById('result-stats').innerHTML = statsHTML;
+
+            renderHistoryTable();
+            isModalOpen = true;
+            document.getElementById('modal-result').classList.add('active');
         }
 
-        function saveHistory(data) {
-            let history = JSON.parse(localStorage.getItem('english_quiz_history') || '[]');
-            history.unshift(data);
-            if(history.length > 10) history = history.slice(0, 10);
-            localStorage.setItem('english_quiz_history', JSON.stringify(history));
+        function saveHistory(record) {
+            let history = JSON.parse(localStorage.getItem('quiz_history') || '[]');
+            history.unshift(record); // Mới nhất xếp trên cùng
+            localStorage.setItem('quiz_history', JSON.stringify(history));
         }
 
-        function renderHistory() {
-            let history = JSON.parse(localStorage.getItem('english_quiz_history') || '[]');
-            const tbody = document.getElementById('history-rows');
-            tbody.innerHTML = "";
-
-            if(history.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4">Chưa có lịch sử làm bài</td></tr>`;
+        function renderHistoryTable() {
+            let history = JSON.parse(localStorage.getItem('quiz_history') || '[]');
+            const tbody = document.getElementById('history-list');
+            if (history.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6">Chưa có lịch sử</td></tr>`;
                 return;
             }
-
-            history.forEach(item => {
-                tbody.innerHTML += `
-                    <tr>
-                        <td>${item.date}</td>
-                        <td style="font-weight:bold; color:var(--primary-dark)">${item.score}</td>
-                        <td>${item.correct}</td>
-                        <td style="color:var(--danger)">${item.violations}</td>
-                    </tr>`;
-            });
+            tbody.innerHTML = history.map((item, index) => `
+                <tr>
+                    <td>${history.length - index}</td>
+                    <td>${item.date}</td>
+                    <td><strong>${item.score}</strong></td>
+                    <td>${item.autoCorrect}</td>
+                    <td>${item.hinted}</td>
+                    <td>${item.violations}</td>
+                </tr>
+            `).join('');
         }
-
-        window.onload = initApp;
     </script>
 </body>
 </html>
