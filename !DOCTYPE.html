@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kiểm tra Cấu trúc Tiếng Anh - Present Simple Tense</title>
+    <style>
+        :root {
+            --primary: #1e88e5;
+            --primary-dark: #1565c0;
+            --success: #2e7d32;
+            --danger: #c62828;
+            --warning: #f57c00;
+            --bg: #f4f6f9;
+            --card-bg: #ffffff;
+            --text: #2c3e50;
+            --border: #e0e0e0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            padding-bottom: 50px;
+        }
+
+        /* Shake Effect when Violate */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-10px); }
+            40%, 80% { transform: translateX(10px); }
+        }
+        .shake {
+            animation: shake 0.4s ease-in-out;
+        }
+
+        /* Sticky Dashboard */
+        .dashboard {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: #ffffff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            border-bottom: 3px solid var(--primary);
+        }
+
+        .dash-item {
+            text-align: center;
+        }
+
+        .dash-label {
+            font-size: 0.8rem;
+            color: #666;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .dash-value {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--primary-dark);
+        }
+
+        .dash-value.danger { color: var(--danger); }
+        .dash-value.success { color: var(--success); }
+
+        .btn-submit-all {
+            background-color: var(--success);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-submit-all:hover {
+            background-color: #1b5e20;
+        }
+
+        /* Main Content Container */
+        .container {
+            max-width: 900px;
+            margin: 25px auto;
+            padding: 0 15px;
+        }
+
+        .section-card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .section-title {
+            color: var(--primary-dark);
+            border-bottom: 2px solid #eef2f5;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-size: 1.25rem;
+        }
+
+        .section-desc {
+            font-size: 0.95rem;
+            color: #555;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+
+        /* Question Styles */
+        .question-card {
+            background: #fdfdfd;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 18px;
+            margin-bottom: 15px;
+            position: relative;
+            transition: border 0.3s ease;
+        }
+
+        .question-card.answered-correct {
+            border-left: 5px solid var(--success);
+            background-color: #f1f8e9;
+        }
+
+        .question-card.answered-hint {
+            border-left: 5px solid var(--warning);
+            background-color: #fffde7;
+        }
+
+        .attempt-counter {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 0.75rem;
+            background: #e3f2fd;
+            color: var(--primary-dark);
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-weight: bold;
+        }
+
+        .q-text {
+            font-size: 1rem;
+            margin-bottom: 12px;
+            font-weight: 500;
+            padding-right: 70px;
+        }
+
+        /* Inputs & Controls */
+        .input-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        input[type="text"], textarea {
+            padding: 10px 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        input[type="text"]:focus, textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 5px rgba(30, 136, 229, 0.3);
+        }
+
+        input.q-input {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        textarea.essay-input {
+            width: 100%;
+            height: 120px;
+            resize: vertical;
+        }
+
+        .btn {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .btn-check {
+            background-color: var(--primary);
+            color: white;
+        }
+        .btn-check:hover { background-color: var(--primary-dark); }
+
+        .btn-hint {
+            background-color: var(--warning);
+            color: white;
+        }
+        .btn-hint:hover { background-color: #e65100; }
+
+        .btn-variants {
+            background-color: #78909c;
+            color: white;
+            display: none;
+            margin-top: 8px;
+        }
+
+        /* Multiple Choice Styling */
+        .mc-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .mc-btn {
+            background: #fff;
+            border: 1px solid var(--border);
+            padding: 10px;
+            border-radius: 6px;
+            text-align: left;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .mc-btn:hover { background: #e3f2fd; }
+        .mc-btn.correct { background: var(--success) !important; color: white; border-color: var(--success); }
+        .mc-btn.wrong { background: var(--danger) !important; color: white; border-color: var(--danger); }
+
+        /* Feedback Message */
+        .feedback {
+            margin-top: 8px;
+            font-size: 0.88rem;
+            font-weight: bold;
+        }
+        .feedback.correct { color: var(--success); }
+        .feedback.wrong { color: var(--danger); }
+        .feedback.info { color: #0277bd; }
+
+        /* Toast Alert (Anti-cheat) */
+        #toast {
+            position: fixed;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--danger);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 9999;
+            display: none;
+        }
+
+        /* Custom Modal System */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-card {
+            background: white;
+            width: 90%;
+            max-width: 550px;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: var(--primary-dark);
+        }
+
+        .modal-body {
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        /* Summary Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .stat-box {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+
+        .stat-box .title { font-size: 0.8rem; color: #666; }
+        .stat-box .val { font-size: 1.1rem; font-weight: bold; color: var(--primary-dark); }
+
+        /* History Table */
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: 0.85rem;
+        }
+
+        .history-table th, .history-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        .history-table th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+
+    <!-- STICKY DASHBOARD -->
+    <div class="dashboard" id="dashboard">
+        <div class="dash-item">
+            <div class="dash-label">Thời gian</div>
+            <div class="dash-value" id="timer">10:00</div>
+        </div>
+        <div class="dash-item">
+            <div class="dash-label">Tiến trình</div>
+            <div class="dash-value" id="progress">0 / 30</div>
+        </div>
+        <div class="dash-item">
+            <div class="dash-label">Điểm hệ 10</div>
+            <div class="dash-value success" id="realtime-score">0.0</div>
+        </div>
+        <div class="dash-item">
+            <div class="dash-label">Lỗi vi phạm</div>
+            <div class="dash-value danger" id="violations-count">0</div>
+        </div>
+        <button class="btn-submit-all" onclick="finishQuiz()">NỘP BÀI</button>
+    </div>
+
+    <!-- TOAST MESSAGE -->
+    <div id="toast">⚠️ PHÁT HIỆN VI PHẠM (Rời Tab / Copy Paste)! Trừ 1 điểm.</div>
+
+    <!-- MAIN QUIZ CONTENT -->
+    <div class="container" id="quiz-container">
+        <!-- Render Javascript ở đây -->
+    </div>
+
+    <!-- CUSTOM MODAL CONFIRM HINT -->
+    <div class="modal-overlay" id="hint-modal">
+        <div class="modal-card">
+            <div class="modal-header">Xác nhận xem lời giải</div>
+            <div class="modal-body">
+                Nếu xem lời giải, bạn sẽ <b>không nhận được điểm</b> (0 điểm) cho câu hỏi này.<br>
+                Bạn có chắc chắn muốn xem không?
+            </div>
+            <div class="modal-actions">
+                <button class="btn" style="background:#ccc" onclick="closeHintModal()">Hủy</button>
+                <button class="btn btn-hint" id="confirm-hint-btn">Đồng ý xem</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- RESULT & HISTORY MODAL -->
+    <div class="modal-overlay" id="result-modal">
+        <div class="modal-card">
+            <div class="modal-header">BẢNG KẾT QUẢ BÀI KIỂM TRA</div>
+            <div class="modal-body">
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="title">Điểm hệ 10</div>
+                        <div class="val" id="res-score">0.0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="title">Tự làm đúng</div>
+                        <div class="val" id="res-correct">0 / 0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="title">Thời gian hoàn thành</div>
+                        <div class="val" id="res-time">00:00</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="title">Số câu xem giải</div>
+                        <div class="val" id="res-hints">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="title">Số lần vi phạm</div>
+                        <div class="val" id="res-violations">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="title">Tổng lượt thử</div>
+                        <div class="val" id="res-attempts">0</div>
+                    </div>
+                </div>
+
+                <h3 style="margin-top: 15px; margin-bottom: 5px; font-size: 1rem;">Lịch Sử Làm Bài (Mới nhất)</h3>
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>Thời gian</th>
+                            <th>Điểm số</th>
+                            <th>Đúng</th>
+                            <th>Lỗi VP</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-rows">
+                        <!-- Data row JS -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-check" onclick="location.reload()">Làm Lại Bài</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. DỮ LIỆU CÂU HỎI ---
+        const quizData = [
+            {
+                section: "PHẦN 1: CHIA ĐỘNG TỪ ĐÚNG DẠNG",
+                desc: "Điền dạng đúng của động từ trong ngoặc.",
+                questions: [
+                    { id: "p1_1", q: "1. She (go) ______ to work by bus every day.", a: ["goes"] },
+                    { id: "p1_2", q: "2. My brother (not/like) ______ vegetables.", a: ["doesn't like", "does not like"] },
+                    { id: "p1_3", q: "3. ______ you (watch) ______ TV in the evening?", a: ["Do...watch", "Do watch"], isSplit: true },
+                    { id: "p1_4", q: "4. He (study) ______ English every weekend.", a: ["studies"] },
+                    { id: "p1_5", q: "5. They (not/live) ______ in this city.", a: ["don't live", "do not live"] },
+                    { id: "p1_6", q: "6. ______ your mother (cook) ______ dinner every day?", a: ["Does...cook", "Does cook"], isSplit: true },
+                    { id: "p1_7", q: "7. The shop (close) ______ at 9 p.m.", a: ["closes"] },
+                    { id: "p1_8", q: "8. I (not/drink) ______ coffee in the morning.", a: ["don't drink", "do not drink"] },
+                    { id: "p1_9", q: "9. ______ it (rain) ______ a lot here in summer?", a: ["Does...rain", "Does rain"], isSplit: true },
+                    { id: "p1_10", q: "10. We (have) ______ lunch at 12 o'clock.", a: ["have"] }
+                ]
+            },
+            {
+                section: "PHẦN 2: SẮP XẾP THÀNH CÂU HOÀN CHỈNH",
+                desc: "Sắp xếp các từ thành câu đúng.",
+                questions: [
+                    { id: "p2_1", q: "1. usually / I / at 6 a.m. / get up", a: ["I usually get up at 6 a.m.", "I usually get up at 6 am"] },
+                    { id: "p2_2", q: "2. does / not / like / She / spicy food", a: ["She does not like spicy food.", "She doesn't like spicy food."] },
+                    { id: "p2_3", q: "3. every day / does / go / he / to the gym?", a: ["Does he go to the gym every day?"] },
+                    { id: "p2_4", q: "4. don't / watch / We / horror movies", a: ["We don't watch horror movies.", "We do not watch horror movies."] },
+                    { id: "p2_5", q: "5. speak / Does / English / your father / well?", a: ["Does your father speak English well?"] }
+                ]
+            },
+            {
+                section: "PHẦN 3: TÌM VÀ SỬA LỖI SAI",
+                desc: "Nhập lại câu đúng hoàn chỉnh sau khi đã sửa lỗi sai.",
+                questions: [
+                    { id: "p3_1", q: "1. She go to school every morning.", a: ["She goes to school every morning."] },
+                    { id: "p3_2", q: "2. Does he plays football on Sundays?", a: ["Does he play football on Sundays?"] },
+                    { id: "p3_3", q: "3. My parents doesn't drink tea.", a: ["My parents don't drink tea.", "My parents do not drink tea."] },
+                    { id: "p3_4", q: "4. I likes eating Vietnamese food.", a: ["I like eating Vietnamese food."] },
+                    { id: "p3_5", q: "5. Do she work in a bank?", a: ["Does she work in a bank?"] },
+                    { id: "p3_6", q: "6. He don't watch TV at night.", a: ["He doesn't watch TV at night.", "He does not watch TV at night."] },
+                    { id: "p3_7", q: "7. Water boil at 100 degrees Celsius.", a: ["Water boils at 100 degrees Celsius.", "Water boils at 100 degrees C."] }
+                ]
+            },
+            {
+                section: "PHẦN 4: CÂU HỎI ĐÁP - LUYỆN NÓI (Ưu tiên dành cho Giáo viên 1-1)",
+                desc: "Học viên trả lời tự do bằng câu đầy đủ (Hệ thống lưu bài viết, không chấm điểm trắc nghiệm tự động).",
+                isPractice: true,
+                questions: [
+                    { id: "p4_1", q: "1. What time do you usually get up?" },
+                    { id: "p4_2", q: "2. What do you have for breakfast?" },
+                    { id: "p4_3", q: "3. How do you go to work/school?" },
+                    { id: "p4_4", q: "4. Does your family live near you?" },
+                    { id: "p4_5", q: "5. What does your best friend do (for a living)?" },
+                    { id: "p4_6", q: "6. Do you drink coffee or tea in the morning?" },
+                    { id: "p4_7", q: "7. What do you usually do on weekends?" },
+                    { id: "p4_8", q: "8. Does it rain a lot in your city?" },
+                    { id: "p4_9", q: "9. What time does your class/work start?" },
+                    { id: "p4_10", q: "10. Do you often eat out or cook at home?" }
+                ]
+            },
+            {
+                section: "PHẦN 5: VIẾT ĐOẠN VĂN NGẮN (5-7 CÂU)",
+                desc: "Viết đoạn văn miêu tả một ngày bình thường của bạn.",
+                isPractice: true,
+                isEssay: true,
+                questions: [
+                    { id: "p5_1", q: "Gợi ý: Thức dậy lúc mấy giờ? Làm gì buổi sáng? Đi làm/học bằng gì? Ăn trưa lúc mấy giờ? Buổi tối làm gì?" }
+                ]
+            },
+            {
+                section: "PHẦN 6: TRẮC NGHIỆM NHANH (MULTIPLE CHOICE)",
+                desc: "Chọn đáp án đúng nhất.",
+                isMC: true,
+                questions: [
+                    { id: "p6_1", q: "1. My sister ______ to the market every morning.", options: ["A. go", "B. goes", "C. going", "D. is go"], a: 1 },
+                    { id: "p6_2", q: "2. ______ they live in Hanoi?", options: ["A. Do", "B. Does", "C. Is", "D. Are"], a: 0 },
+                    { id: "p6_3", q: "3. He ______ TV after dinner.", options: ["A. don't watch", "B. doesn't watches", "C. doesn't watch", "D. not watch"], a: 2 },
+                    { id: "p6_4", q: "4. The sun ______ in the east.", options: ["A. rise", "B. rises", "C. rising", "D. is rising"], a: 1 },
+                    { id: "p6_5", q: "5. ______ your father work on Saturdays?", options: ["A. Do", "B. Does", "C. Is", "D. Are"], a: 1 },
+                    { id: "p6_6", q: "6. I ______ a shower every morning.", options: ["A. take", "B. takes", "C. taking", "D. am take"], a: 0 },
+                    { id: "p6_7", q: "7. She ______ meat; she's vegetarian.", options: ["A. don't eat", "B. doesn't eats", "C. doesn't eat", "D. not eats"], a: 2 },
+                    { id: "p6_8", q: "8. We ______ English class on Tuesdays.", options: ["A. has", "B. have", "C. having", "D. is have"], a: 1 }
+                ]
+            }
+        ];
+
+        // --- 2. BIẾN TRẠNG THÁI (GLOBAL STATE) ---
+        let totalScorableQuestions = 0; // Các câu hỏi có tính điểm (P1, P2, P3, P6)
+        let state = {}; 
+        let violations = 0;
+        let timeRemaining = 600; // 10 phút đếm ngược
+        let timerInterval = null;
+        let pendingHintQId = null;
+        let isModalOpen = false;
+
+        // --- 3. CHUẨN HÓA CHUỖI ĐÁP ÁN ---
+        function normalizeText(text) {
+            if(!text) return "";
+            let res = text.toLowerCase().trim();
+            // Thay thế từ viết tắt thông dụng
+            const abbreviations = [
+                { raw: /\btelevision\b/g, replace: "tv" },
+                { raw: /\bmother\b/g, replace: "mom" },
+                { raw: /\bfather\b/g, replace: "dad" },
+                { raw: /\bcannot\b/g, replace: "can't" },
+                { raw: /\bdo not\b/g, replace: "don't" },
+                { raw: /\bdoes not\b/g, replace: "doesn't" },
+                { raw: /\bis not\b/g, replace: "isn't" },
+                { raw: /\bare not\b/g, replace: "aren't" }
+            ];
+            abbreviations.forEach(item => {
+                res = res.replace(item.raw, item.replace);
+            });
+            // Loại bỏ dấu câu không cần thiết để so sánh linh hoạt
+            res = res.replace(/[.,?!'"]/g, "").replace(/\s+/g, " ");
+            return res;
+        }
+
+        // --- 4. KHỞI TẠO VÀ RENDER GIAO DIỆN ---
+        function initApp() {
+            const container = document.getElementById('quiz-container');
+            container.innerHTML = "";
+            totalScorableQuestions = 0;
+
+            quizData.forEach((sec, sIdx) => {
+                const secCard = document.createElement('div');
+                secCard.className = 'section-card';
+                
+                let html = `<div class="section-title">${sec.section}</div>`;
+                if(sec.desc) html += `<div class="section-desc">${sec.desc}</div>`;
+
+                sec.questions.forEach((q) => {
+                    const isScorable = !sec.isPractice;
+                    if(isScorable) totalScorableQuestions++;
+
+                    // Khởi tạo state cho từng câu
+                    state[q.id] = {
+                        answered: false,
+                        correct: false,
+                        hinted: false,
+                        attempts: 0,
+                        scorable: isScorable,
+                        userAns: ""
+                    };
+
+                    html += `
+                    <div class="question-card" id="card-${q.id}">
+                        <div class="attempt-counter">Lượt thử: <span id="att-${q.id}">0</span></div>
+                        <div class="q-text">${q.q}</div>
+                    `;
+
+                    if(sec.isEssay) {
+                        html += `
+                        <textarea class="essay-input" id="input-${q.id}" placeholder="Nhập đoạn văn của bạn tại đây..."></textarea>
+                        `;
+                    } else if(sec.isPractice) {
+                        html += `
+                        <div class="input-group">
+                            <input type="text" class="q-input" id="input-${q.id}" placeholder="Nhập câu trả lời..." onkeydown="handleEnter(event, '${q.id}')">
+                        </div>
+                        `;
+                    } else if(sec.isMC) {
+                        html += `<div class="mc-options">`;
+                        q.options.forEach((opt, oIdx) => {
+                            html += `<button class="mc-btn" id="mc-${q.id}-${oIdx}" onclick="checkMC('${q.id}', ${oIdx}, ${q.a})">${opt}</button>`;
+                        });
+                        html += `</div>`;
+                    } else if(q.isSplit) {
+                        html += `
+                        <div class="input-group">
+                            <input type="text" class="q-input" id="input-${q.id}" placeholder="VD: Do...watch hoặc Do watch" onkeydown="handleEnter(event, '${q.id}')">
+                            <button class="btn btn-check" onclick="checkText('${q.id}')">Gửi</button>
+                            <button class="btn btn-hint" onclick="openHintModal('${q.id}')">Giải</button>
+                        </div>
+                        `;
+                    } else {
+                        html += `
+                        <div class="input-group">
+                            <input type="text" class="q-input" id="input-${q.id}" placeholder="Nhập đáp án..." onkeydown="handleEnter(event, '${q.id}')">
+                            <button class="btn btn-check" onclick="checkText('${q.id}')">Gửi</button>
+                            <button class="btn btn-hint" onclick="openHintModal('${q.id}')">Giải</button>
+                        </div>
+                        `;
+                    }
+
+                    html += `
+                        <button class="btn btn-variants" id="btn-var-${q.id}" onclick="showVariants('${q.id}')">Xem các đáp án khác</button>
+                        <div class="feedback" id="fb-${q.id}"></div>
+                    </div>
+                    `;
+                });
+
+                secCard.innerHTML = html;
+                container.appendChild(secCard);
+            });
+
+            updateDashboard();
+            startTimer();
+            setupAntiCheat();
+        }
+
+        function handleEnter(e, qId) {
+            if(e.key === 'Enter') {
+                checkText(qId);
+            }
+        }
+
+        // --- 5. LOGIC KIỂM TRA ĐÁP ÁN TEXT ---
+        function checkText(qId) {
+            const st = state[qId];
+            if(st.answered) return;
+
+            const inputEl = document.getElementById(`input-${qId}`);
+            const val = inputEl.value.trim();
+            if(!val) return;
+
+            st.attempts++;
+            document.getElementById(`att-${qId}`).innerText = st.attempts;
+
+            // Tìm thông tin câu hỏi trong DB
+            let qObj = null;
+            for(let sec of quizData) {
+                let found = sec.questions.find(item => item.id === qId);
+                if(found) { qObj = found; break; }
+            }
+
+            const normInput = normalizeText(val);
+            let isCorrect = false;
+
+            qObj.a.forEach(ans => {
+                if(normalizeText(ans) === normInput) isCorrect = true;
+            });
+
+            const fb = document.getElementById(`fb-${qId}`);
+            const card = document.getElementById(`card-${qId}`);
+
+            if(isCorrect) {
+                st.answered = true;
+                st.correct = true;
+                st.userAns = val;
+                inputEl.disabled = true;
+                card.classList.add('answered-correct');
+                fb.className = "feedback correct";
+                fb.innerText = "✓ Chính xác!";
+
+                // Hiện nút đáp án khác nếu có nhiều hơn 1 lựa chọn
+                if(qObj.a.length > 1) {
+                    document.getElementById(`btn-var-${qId}`).style.display = "inline-block";
+                }
+
+                updateDashboard();
+                autoFocusNext(qId);
+            } else {
+                fb.className = "feedback wrong";
+                fb.innerText = "✗ Chưa chính xác, hãy thử lại!";
+            }
+        }
+
+        // --- 6. LOGIC TRẮC NGHIỆM NHANH (MC) ---
+        function checkMC(qId, selectedIdx, correctIdx) {
+            const st = state[qId];
+            if(st.answered) return;
+
+            st.attempts++;
+            document.getElementById(`att-${qId}`).innerText = st.attempts;
+
+            const card = document.getElementById(`card-${qId}`);
+            const fb = document.getElementById(`fb-${qId}`);
+
+            if(selectedIdx === correctIdx) {
+                st.answered = true;
+                st.correct = true;
+                document.getElementById(`mc-${qId}-${selectedIdx}`).classList.add('correct');
+                card.classList.add('answered-correct');
+                fb.className = "feedback correct";
+                fb.innerText = "✓ Đúng!";
+                updateDashboard();
+                autoFocusNext(qId);
+            } else {
+                const btn = document.getElementById(`mc-${qId}-${selectedIdx}`);
+                btn.classList.add('wrong');
+                setTimeout(() => btn.classList.remove('wrong'), 1000);
+                fb.className = "feedback wrong";
+                fb.innerText = "✗ Sai rồi, chọn lại!";
+            }
+        }
+
+        // --- 7. HIỂN THỊ ĐÁP ÁN KHÁC (VARIANTS) ---
+        function showVariants(qId) {
+            let qObj = null;
+            for(let sec of quizData) {
+                let found = sec.questions.find(item => item.id === qId);
+                if(found) { qObj = found; break; }
+            }
+            const fb = document.getElementById(`fb-${qId}`);
+            fb.className = "feedback info";
+            fb.innerText = "Các biến thể đáp án đúng: " + qObj.a.join(" | ");
+        }
+
+        // --- 8. LOGIC GỢI Ý / XEM GIẢI (HINT MODAL) ---
+        function openHintModal(qId) {
+            if(state[qId].answered) return;
+            pendingHintQId = qId;
+            isModalOpen = true;
+            document.getElementById('hint-modal').style.display = 'flex';
+        }
+
+        function closeHintModal() {
+            document.getElementById('hint-modal').style.display = 'none';
+            pendingHintQId = null;
+            isModalOpen = false;
+        }
+
+        document.getElementById('confirm-hint-btn').addEventListener('click', () => {
+            if(!pendingHintQId) return;
+            const qId = pendingHintQId;
+            const st = state[qId];
+
+            st.answered = true;
+            st.correct = false; // Xem giải => 0 điểm
+            st.hinted = true;
+
+            let qObj = null;
+            for(let sec of quizData) {
+                let found = sec.questions.find(item => item.id === qId);
+                if(found) { qObj = found; break; }
+            }
+
+            const inputEl = document.getElementById(`input-${qId}`);
+            if(inputEl) {
+                inputEl.value = qObj.a[0];
+                inputEl.disabled = true;
+            }
+
+            const card = document.getElementById(`card-${qId}`);
+            card.classList.add('answered-hint');
+
+            const fb = document.getElementById(`fb-${qId}`);
+            fb.className = "feedback wrong";
+            fb.innerText = "Đã xem giải. Đáp án đúng: " + qObj.a[0];
+
+            closeHintModal();
+            updateDashboard();
+            autoFocusNext(qId);
+        });
+
+        // --- 9. TỰ ĐỘNG CHUYỂN CÂU (FOCUS & SMOOTH SCROLL) ---
+        function autoFocusNext(currentQId) {
+            let allIds = [];
+            quizData.forEach(s => s.questions.forEach(q => allIds.push(q.id)));
+            let idx = allIds.indexOf(currentQId);
+            if(idx !== -1 && idx < allIds.length - 1) {
+                let nextId = allIds[idx + 1];
+                let nextCard = document.getElementById(`card-${nextId}`);
+                let nextInput = document.getElementById(`input-${nextId}`);
+                
+                if(nextCard) {
+                    nextCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+                if(nextInput) {
+                    setTimeout(() => nextInput.focus(), 500);
+                }
+            }
+        }
+
+        // --- 10. BỘ ĐẾM THỜI GIAN & DASHBOARD REALTIME ---
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                let m = Math.floor(timeRemaining / 60);
+                let s = timeRemaining % 60;
+                document.getElementById('timer').innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
+
+                if(timeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    alert("Đã hết thời gian làm bài!");
+                    finishQuiz();
+                }
+            }, 1000);
+        }
+
+        function updateDashboard() {
+            let doneCount = 0;
+            let correctCount = 0;
+
+            Object.keys(state).forEach(k => {
+                if(state[k].scorable) {
+                    if(state[k].answered) doneCount++;
+                    if(state[k].correct && !state[k].hinted) correctCount++;
+                }
+            });
+
+            document.getElementById('progress').innerText = `${doneCount} / ${totalScorableQuestions}`;
+            
+            // Tính điểm hệ 10
+            let rawScore = (correctCount / totalScorableQuestions) * 10;
+            let finalScore = Math.max(0, rawScore - violations); // Trừ điểm vi phạm
+            document.getElementById('realtime-score').innerText = finalScore.toFixed(1);
+        }
+
+        // --- 11. HỆ THỐNG CHỐNG GIAN LẬN (ANTI-CHEAT) ---
+        function triggerViolation() {
+            if(isModalOpen) return; // Ngoại lệ khi đang mở Modal
+            
+            violations++;
+            document.getElementById('violations-count').innerText = violations;
+
+            // Hiệu ứng Rung (Shake)
+            document.body.classList.add('shake');
+            setTimeout(() => document.body.classList.remove('shake'), 400);
+
+            // Toast Message
+            const toast = document.getElementById('toast');
+            toast.style.display = 'block';
+            setTimeout(() => { toast.style.display = 'none'; }, 3000);
+
+            updateDashboard();
+        }
+
+        function setupAntiCheat() {
+            // Rời Tab
+            window.addEventListener('blur', () => {
+                triggerViolation();
+            });
+
+            // Copy / Paste
+            document.addEventListener('paste', (e) => {
+                triggerViolation();
+            });
+        }
+
+        // --- 12. KẾT THÚC BÀI & XỬ LÝ LỊCH SỬ (LOCALSTORAGE) ---
+        function finishQuiz() {
+            clearInterval(timerInterval);
+            isModalOpen = true;
+
+            let correctCount = 0;
+            let hintCount = 0;
+            let totalAttempts = 0;
+
+            Object.keys(state).forEach(k => {
+                if(state[k].scorable) {
+                    if(state[k].correct && !state[k].hinted) correctCount++;
+                    if(state[k].hinted) hintCount++;
+                    totalAttempts += state[k].attempts;
+                }
+            });
+
+            let rawScore = (correctCount / totalScorableQuestions) * 10;
+            let finalScore = Math.max(0, rawScore - violations).toFixed(1);
+
+            let timeSpent = 600 - timeRemaining;
+            let mSpent = Math.floor(timeSpent / 60);
+            let sSpent = timeSpent % 60;
+            let timeStr = `${mSpent}p ${sSpent}s`;
+
+            // Cập nhật Modal Results
+            document.getElementById('res-score').innerText = finalScore;
+            document.getElementById('res-correct').innerText = `${correctCount} / ${totalScorableQuestions}`;
+            document.getElementById('res-time').innerText = timeStr;
+            document.getElementById('res-hints').innerText = hintCount;
+            document.getElementById('res-violations').innerText = violations;
+            document.getElementById('res-attempts').innerText = totalAttempts;
+
+            // Lưu LocalStorage
+            saveHistory({
+                date: new Date().toLocaleString('vi-VN'),
+                score: finalScore,
+                correct: `${correctCount}/${totalScorableQuestions}`,
+                violations: violations
+            });
+
+            renderHistory();
+            document.getElementById('result-modal').style.display = 'flex';
+        }
+
+        function saveHistory(data) {
+            let history = JSON.parse(localStorage.getItem('english_quiz_history') || '[]');
+            history.unshift(data); // Mới nhất xếp trên cùng
+            if(history.length > 10) history = history.slice(0, 10); // Giới hạn 10 bản ghi gần nhất
+            localStorage.setItem('english_quiz_history', JSON.stringify(history));
+        }
+
+        function renderHistory() {
+            let history = JSON.parse(localStorage.getItem('english_quiz_history') || '[]');
+            const tbody = document.getElementById('history-rows');
+            tbody.innerHTML = "";
+
+            if(history.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4">Chưa có lịch sử làm bài</td></tr>`;
+                return;
+            }
+
+            history.forEach(item => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${item.date}</td>
+                        <td style="font-weight:bold; color:var(--primary-dark)">${item.score}</td>
+                        <td>${item.correct}</td>
+                        <td style="color:var(--danger)">${item.violations}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        // Khởi chạy khi load trang
+        window.onload = initApp;
+    </script>
+</body>
+</html>
